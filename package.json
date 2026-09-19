@@ -133,9 +133,7 @@
     "format:check": "prettier --check .",
     "check:exports": "publint --strict && attw --pack . --profile node16",
     "verify": "npm run lint && npm run format:check && npm run typecheck && npm run test && npm run build && npm run check:exports",
-    "changeset": "changeset",
-    "version": "changeset version",
-    "release": "npm run build && changeset publish"
+    "release": "npm run verify && npm publish --access public"
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": ">=1.21.0",
@@ -159,7 +157,6 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@changesets/cli": "^3.0.3",
     "@eslint/js": "^10.0.1",
     "@tanstack/react-query": "^5.103.1",
     "@testing-library/jest-dom": "^7.0.1",

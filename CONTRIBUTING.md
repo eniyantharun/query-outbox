@@ -50,13 +50,19 @@ minutes long, and shortening them in tests would stop testing the real policy.
 A new storage adapter needs one line: add it to `conformanceSuite(...)`. If it
 passes, the core will work with it.
 
-## Changesets
+## Releasing
 
-Every user-visible change needs one:
+No bot ever commits here. A release is a tag you push:
 
 ```bash
-npm run changeset
+# update CHANGELOG.md under a new version heading, then
+npm version minor          # bumps package.json and creates the v0.2.0 tag
+git push --follow-tags
 ```
 
-Releases happen from `main` via the Changesets action, publishing with npm
-provenance over OIDC. There is no `NPM_TOKEN` in this repository.
+The tag triggers `.github/workflows/release.yml`, which re-runs the full
+verification, refuses to continue if the tag and `package.json` disagree, then
+publishes to npm with provenance over OIDC and opens the GitHub release.
+
+There is no `NPM_TOKEN` secret in this repository. Publishing rights come from
+npm trusted publishing, configured against this repo and workflow file.
