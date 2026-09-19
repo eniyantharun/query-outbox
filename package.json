@@ -1,0 +1,175 @@
+{
+  "name": "query-outbox",
+  "version": "0.1.0",
+  "description": "Durable, causally-ordered offline mutation queue for TanStack Query. Transactional outbox for React and React Native: survives app kill, replays in dependency order, deduplicates with idempotency keys.",
+  "keywords": [
+    "offline",
+    "offline-first",
+    "outbox",
+    "mutation-queue",
+    "tanstack-query",
+    "react-query",
+    "react-native",
+    "sync",
+    "idempotency",
+    "optimistic-updates"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./react": {
+      "import": {
+        "types": "./dist/react/index.d.mts",
+        "default": "./dist/react/index.mjs"
+      },
+      "require": {
+        "types": "./dist/react/index.d.cts",
+        "default": "./dist/react/index.cjs"
+      }
+    },
+    "./query": {
+      "import": {
+        "types": "./dist/query/index.d.mts",
+        "default": "./dist/query/index.mjs"
+      },
+      "require": {
+        "types": "./dist/query/index.d.cts",
+        "default": "./dist/query/index.cjs"
+      }
+    },
+    "./storage/memory": {
+      "import": {
+        "types": "./dist/storage/memory.d.mts",
+        "default": "./dist/storage/memory.mjs"
+      },
+      "require": {
+        "types": "./dist/storage/memory.d.cts",
+        "default": "./dist/storage/memory.cjs"
+      }
+    },
+    "./storage/local-storage": {
+      "import": {
+        "types": "./dist/storage/local-storage.d.mts",
+        "default": "./dist/storage/local-storage.mjs"
+      },
+      "require": {
+        "types": "./dist/storage/local-storage.d.cts",
+        "default": "./dist/storage/local-storage.cjs"
+      }
+    },
+    "./storage/async-storage": {
+      "import": {
+        "types": "./dist/storage/async-storage.d.mts",
+        "default": "./dist/storage/async-storage.mjs"
+      },
+      "require": {
+        "types": "./dist/storage/async-storage.d.cts",
+        "default": "./dist/storage/async-storage.cjs"
+      }
+    },
+    "./net/browser": {
+      "import": {
+        "types": "./dist/net/browser.d.mts",
+        "default": "./dist/net/browser.mjs"
+      },
+      "require": {
+        "types": "./dist/net/browser.d.cts",
+        "default": "./dist/net/browser.cjs"
+      }
+    },
+    "./net/netinfo": {
+      "import": {
+        "types": "./dist/net/netinfo.d.mts",
+        "default": "./dist/net/netinfo.mjs"
+      },
+      "require": {
+        "types": "./dist/net/netinfo.d.cts",
+        "default": "./dist/net/netinfo.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:exports": "publint --strict && attw --pack . --profile node16",
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run check:exports",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "npm run build && changeset publish"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=1.21.0",
+    "@react-native-community/netinfo": ">=11.0.0",
+    "@tanstack/react-query": "^5.0.0",
+    "react": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-native-async-storage/async-storage": {
+      "optional": true
+    },
+    "@react-native-community/netinfo": {
+      "optional": true
+    },
+    "@tanstack/react-query": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@changesets/cli": "^3.0.3",
+    "@eslint/js": "^10.0.1",
+    "@tanstack/react-query": "^5.103.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitest/coverage-v8": "^5.0.1",
+    "eslint": "^10.11.0",
+    "fast-check": "^4.10.1",
+    "globals": "^17.12.0",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.9.8",
+    "publint": "^0.3.24",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tsdown": "^0.23.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.1"
+  },
+  "packageManager": "npm@11.9.0"
+}

@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  # Required for npm trusted publishing (OIDC). No long-lived NPM_TOKEN lives
+  # in this repository.
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      # Trusted publishing requires npm >= 11.5.1.
+      - run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - name: Verify
+        run: npm run verify
+
+      # Opens (or updates) a version PR. Merging that PR runs this workflow
+      # again, at which point `publish` is what actually fires.
+      - name: Create release PR or publish
+        uses: changesets/action@v1
+        with:
+          version: npm run version
+          publish: npm run release
+          commit: 'chore: release'
+          title: 'chore: release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
