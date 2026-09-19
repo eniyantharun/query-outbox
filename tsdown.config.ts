@@ -18,10 +18,12 @@ export default defineConfig({
   sourcemap: true,
   target: 'es2022',
   // Never bundle the platform peers into dist; consumers supply them.
-  external: [
-    'react',
-    '@tanstack/react-query',
-    '@react-native-async-storage/async-storage',
-    '@react-native-community/netinfo',
-  ],
+  deps: {
+    neverBundle: [
+      'react',
+      '@tanstack/react-query',
+      '@react-native-async-storage/async-storage',
+      '@react-native-community/netinfo',
+    ],
+  },
 })

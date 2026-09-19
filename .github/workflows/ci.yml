@@ -40,12 +40,18 @@ jobs:
       - name: Test
         run: npm run test:coverage
 
+      # tsdown needs Promise.withResolvers, which landed in Node 22, so the
+      # bundler cannot run on the oldest supported runtime. That is a
+      # constraint on building this package, not on using it: the emitted
+      # output targets es2022 and the suite above proves it runs on Node 20.
       - name: Build
+        if: matrix.node != 20
         run: npm run build
 
       # Validates the published exports map against the real tarball, so a
       # broken ESM/CJS/types resolution is caught here rather than by a user.
       - name: Check published exports
+        if: matrix.node != 20
         run: npm run check:exports
 
       - name: Upload coverage

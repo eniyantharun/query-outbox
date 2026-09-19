@@ -5,6 +5,13 @@ npm install
 npm run verify     # lint, format, typecheck, test, build, exports check
 ```
 
+`verify` runs exactly what CI runs, so a green local run means a green CI run.
+
+**Node 22+ is required to develop this package**, because tsdown needs
+`Promise.withResolvers`. Consumers only need Node 20, which is what
+`engines.node` advertises and what CI proves by running the whole suite on 20 —
+it just skips the bundler there.
+
 ## The one architectural rule
 
 **`src/core` imports nothing.** Not React, not React Native, not TanStack Query.
