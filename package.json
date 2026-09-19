@@ -15,6 +15,15 @@
     "optimistic-updates"
   ],
   "license": "MIT",
+  "author": "eniyantharun",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eniyantharun/query-outbox.git"
+  },
+  "homepage": "https://github.com/eniyantharun/query-outbox#readme",
+  "bugs": {
+    "url": "https://github.com/eniyantharun/query-outbox/issues"
+  },
   "type": "module",
   "sideEffects": false,
   "engines": {
