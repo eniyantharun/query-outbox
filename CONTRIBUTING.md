@@ -28,14 +28,14 @@ src/net/        NetworkMonitor implementations
 
 ## Tests
 
-| File | Covers |
-|---|---|
-| `test/core/units.test.ts` | backoff, ids, refs, resolution store |
-| `test/core/outbox.test.ts` | delivery, ordering, retries, dead letters, coalescing |
-| `test/core/crash.test.ts` | process death after each of the first *n* storage writes |
-| `test/core/properties.test.ts` | `fast-check` over randomised interleavings |
-| `test/storage/adapters.test.ts` | one shared conformance suite per adapter |
-| `test/query/bindings.test.tsx` | hooks, optimistic updates, rollback, replay |
+| File                            | Covers                                                   |
+| ------------------------------- | -------------------------------------------------------- |
+| `test/core/units.test.ts`       | backoff, ids, refs, resolution store                     |
+| `test/core/outbox.test.ts`      | delivery, ordering, retries, dead letters, coalescing    |
+| `test/core/crash.test.ts`       | process death after each of the first _n_ storage writes |
+| `test/core/properties.test.ts`  | `fast-check` over randomised interleavings               |
+| `test/storage/adapters.test.ts` | one shared conformance suite per adapter                 |
+| `test/query/bindings.test.tsx`  | hooks, optimistic updates, rollback, replay              |
 
 Use the virtual `TestClock` rather than real timers — backoff windows are
 minutes long, and shortening them in tests would stop testing the real policy.

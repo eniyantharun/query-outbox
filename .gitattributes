@@ -1,0 +1,6 @@
+# Authored on Windows, verified on Linux CI. Normalising to LF in the
+# repository keeps Prettier from disagreeing with itself across the two.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.tgz binary

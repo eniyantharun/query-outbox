@@ -132,7 +132,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:exports": "publint --strict && attw --pack . --profile node16",
-    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run check:exports",
+    "verify": "npm run lint && npm run format:check && npm run typecheck && npm run test && npm run build && npm run check:exports",
     "changeset": "changeset",
     "version": "changeset version",
     "release": "npm run build && changeset publish"
