@@ -1,5 +1,10 @@
 # query-outbox
 
+[![CI](https://github.com/eniyantharun/query-outbox/actions/workflows/ci.yml/badge.svg)](https://github.com/eniyantharun/query-outbox/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/query-outbox.svg)](https://www.npmjs.com/package/query-outbox)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/query-outbox)](https://bundlephobia.com/package/query-outbox)
+[![license](https://img.shields.io/npm/l/query-outbox.svg)](./LICENSE)
+
 **A durable, causally-ordered mutation queue for TanStack Query.** Writes survive app termination, replay in dependency order, and never double-apply.
 
 Built for React Native first, works on the web. It wraps the `useMutation` API you already have — there is no data layer to rewrite.
