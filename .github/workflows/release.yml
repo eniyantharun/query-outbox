@@ -53,7 +53,23 @@ jobs:
       - name: Verify
         run: npm run verify
 
+      # The bootstrap release is published by hand, because npm trusted
+      # publishing cannot be configured until the package exists. Treating an
+      # already-published version as a no-op means the tag for that release can
+      # still be pushed, and a re-run of a failed job never dies on a duplicate.
+      - name: Is this version already on npm?
+        id: published
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "query-outbox@$VERSION" version >/dev/null 2>&1; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "$VERSION is already published; skipping the publish step."
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish
+        if: steps.published.outputs.already == 'false'
         run: npm publish --access public
         env:
           # Set here rather than in .npmrc on purpose: provenance can only be
