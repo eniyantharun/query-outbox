@@ -133,7 +133,8 @@
     "format:check": "prettier --check .",
     "check:exports": "publint --strict && attw --pack . --profile node16",
     "verify": "npm run lint && npm run format:check && npm run typecheck && npm run test && npm run build && npm run check:exports",
-    "release": "npm run verify && npm publish --access public"
+    "prepublishOnly": "npm run verify",
+    "release": "npm publish --access public"
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": ">=1.21.0",
