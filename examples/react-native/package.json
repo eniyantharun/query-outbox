@@ -15,6 +15,6 @@
     "expo": "^57.0.0",
     "react": "19.3.0",
     "react-native": "0.87.1",
-    "query-outbox": "file:../../query-outbox-0.1.0.tgz"
+    "query-outbox": "^0.1.0"
   }
 }

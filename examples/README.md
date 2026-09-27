@@ -8,13 +8,12 @@ Two apps exercising the same operations against the same outbox core.
 - **`web/`** — Vite, localStorage, `navigator.onLine`. Same flow using DevTools →
   Network → Offline, and a hard reload in place of the force-quit.
 
-Neither is wired into the root workspace. Each installs `query-outbox` from the
-packed tarball, so it exercises the published artifact rather than `src/`:
+Neither is wired into the root workspace. Each installs `query-outbox` from npm,
+so it exercises the published package rather than `src/`:
 
 ```bash
-npm run build && npm pack          # in the repo root
 cd examples/react-native
-npm install ../../query-outbox-0.1.0.tgz
+npm install
 npx expo start
 ```
 
