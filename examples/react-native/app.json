@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "query-outbox example",
+    "slug": "query-outbox-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "dev.queryoutbox.example"
+    },
+    "android": {
+      "package": "dev.queryoutbox.example"
+    }
+  }
+}

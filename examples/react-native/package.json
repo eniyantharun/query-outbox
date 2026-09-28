@@ -2,11 +2,12 @@
   "name": "query-outbox-example-react-native",
   "private": true,
   "version": "0.0.0",
-  "main": "App.tsx",
+  "main": "index.ts",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
-    "ios": "expo start --ios"
+    "ios": "expo start --ios",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.1.0",
@@ -15,6 +16,10 @@
     "expo": "^57.0.0",
     "react": "19.3.0",
     "react-native": "0.87.1",
-    "query-outbox": "^0.1.0"
+    "query-outbox": "^0.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^6.0.3"
   }
 }

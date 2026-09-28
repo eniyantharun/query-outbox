@@ -8,3 +8,8 @@ coverage
 .idea
 .vscode
 prompt*.txt
+
+# Example apps are demos, not shipped products. Their lockfiles rot fast
+# and bury the diff; let them resolve fresh.
+examples/*/package-lock.json
+examples/*/.expo

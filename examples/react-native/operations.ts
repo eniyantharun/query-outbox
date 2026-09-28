@@ -1,100 +1,80 @@
 import { PermanentError } from 'query-outbox'
 import { defineQueryOperation } from 'query-outbox/query'
 
-const API = 'https://api.example.com'
+import { createTodoOnServer, updateTodoOnServer, type Todo } from './fake-server'
 
-export interface Todo {
-  id: string
-  title: string
-  done?: boolean
-  pending?: boolean
-}
+export type { Todo }
 
-async function request<T>(
-  path: string,
-  init: RequestInit,
-  idempotencyKey: string,
-  signal: AbortSignal,
-): Promise<T> {
-  const response = await fetch(`${API}${path}`, {
-    ...init,
-    signal,
-    headers: {
-      'Content-Type': 'application/json',
-      // The server stores this alongside the write. A replay returns the
-      // original result instead of writing a second row.
-      'Idempotency-Key': idempotencyKey,
-      ...init.headers,
-    },
-  })
+const TODOS = ['todos'] as const
 
-  // A 4xx other than 408/429 will never succeed by being retried, so fail fast
-  // rather than spending the whole attempt budget on it.
-  if (response.status >= 400 && response.status < 500) {
-    if (response.status !== 408 && response.status !== 429) {
-      throw new PermanentError(`Server rejected the write: ${response.status}`)
-    }
+/** The on-device backend throws a plain Error named PermanentError; re-throw the real one. */
+function rethrow(error: unknown): never {
+  if (error instanceof Error && error.name === 'PermanentError') {
+    throw new PermanentError(error.message)
   }
-  if (!response.ok) throw new Error(`HTTP ${response.status}`)
-  return (await response.json()) as T
+  throw error
 }
 
 export const createTodo = defineQueryOperation({
   name: 'todo.create',
-  handler: ({ title }: { title: string }, ctx) =>
-    request<Todo>(
-      '/todos',
-      { method: 'POST', body: JSON.stringify({ title }) },
-      ctx.idempotencyKey,
-      ctx.signal,
-    ),
 
-  // Lets `todo.update` address this row before the server has named it.
+  handler: async ({ title }: { title: string }, ctx) => {
+    try {
+      return await createTodoOnServer({ title }, ctx.idempotencyKey)
+    } catch (error) {
+      return rethrow(error)
+    }
+  },
+
+  // Lets todo.update address this row before the server has named it.
   resolvesPlaceholder: (result) => result.id,
 
+  // Replayed from disk on a cold start, which is why a queued write is still
+  // on screen after a force-quit instead of silently vanishing.
   optimistic: ({ title }, { queryClient, placeholderId }) => {
-    queryClient.setQueryData<Todo[]>(['todos'], (todos = []) => [
+    queryClient.setQueryData<Todo[]>(TODOS, (todos = []) => [
       ...todos,
-      { id: placeholderId, title, pending: true },
+      { id: placeholderId, title },
     ])
     return () => {
-      queryClient.setQueryData<Todo[]>(['todos'], (todos = []) =>
+      queryClient.setQueryData<Todo[]>(TODOS, (todos = []) =>
         todos.filter((todo) => todo.id !== placeholderId),
       )
     }
   },
 
-  invalidates: [['todos']],
+  invalidates: [TODOS],
 })
 
 export const updateTodo = defineQueryOperation({
   name: 'todo.update',
-  handler: ({ id, title }: { id: string; title: string }, ctx) =>
-    request<Todo>(
-      `/todos/${id}`,
-      { method: 'PATCH', body: JSON.stringify({ title }) },
-      ctx.idempotencyKey,
-      ctx.signal,
-    ),
 
-  optimistic: ({ id, title }, { queryClient }) => {
-    const previous = queryClient.getQueryData<Todo[]>(['todos'])
-    queryClient.setQueryData<Todo[]>(['todos'], (todos = []) =>
-      todos.map((todo) => (todo.id === id ? { ...todo, title, pending: true } : todo)),
-    )
-    return () => {
-      queryClient.setQueryData<Todo[]>(['todos'], previous)
+  handler: async ({ id, title }: { id: string; title: string }, ctx) => {
+    try {
+      return await updateTodoOnServer({ id, title }, ctx.idempotencyKey)
+    } catch (error) {
+      return rethrow(error)
     }
   },
 
-  // Many edits to one row while offline collapse into a single request. Only
-  // operations that have never been sent are merged.
+  optimistic: ({ id, title }, { queryClient }) => {
+    const previous = queryClient.getQueryData<Todo[]>(TODOS)
+    queryClient.setQueryData<Todo[]>(TODOS, (todos = []) =>
+      todos.map((todo) => (todo.id === id ? { ...todo, title } : todo)),
+    )
+    return () => {
+      queryClient.setQueryData<Todo[]>(TODOS, previous)
+    }
+  },
+
+  // Rename the same row five times offline and only one request goes out.
+  // Only operations that have never been sent are merged.
   coalesce: {
     key: ({ id }) => id,
     merge: (_earlier, later) => later,
   },
 
-  invalidates: [['todos']],
+  invalidates: [TODOS],
 })
 
 export const operations = [createTodo, updateTodo]
