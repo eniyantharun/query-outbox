@@ -210,8 +210,21 @@ export function useOnlineManagerSync(outbox: Outbox): void {
   }, [outbox])
 }
 
+/**
+ * The slice of an operation that optimistic replay actually reads.
+ *
+ * Declared structurally rather than as `QueryOperation<never, never>`, which
+ * nothing real satisfies: a `QueryOperation<Vars, Result>` cannot be assigned
+ * to it because the phantom `__result` disagrees. Asking only for what is used
+ * means every operation fits without a cast at the call site.
+ */
+export interface ReplayableOperation {
+  name: string
+  optimistic?: (variables: never, context: OptimisticContext) => (() => void) | undefined
+}
+
 export interface ReplayOptimisticOptions {
-  operations: readonly QueryOperation<never, never>[]
+  operations: readonly ReplayableOperation[]
 }
 
 /**

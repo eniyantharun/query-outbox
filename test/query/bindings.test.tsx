@@ -327,7 +327,7 @@ describe('useReplayOptimistic', () => {
     // Boot two: a fresh cache with nothing in it.
     const second = makeOutbox()
     function Screen(): ReactNode {
-      useReplayOptimistic({ operations: [createTodo] as never })
+      useReplayOptimistic({ operations: [createTodo] })
       useOutboxRecords()
       const rows = queryClient.getQueryData<Todo[]>(TODOS) ?? []
       return <span data-testid="rows">{rows.map((row) => row.title).join(',')}</span>

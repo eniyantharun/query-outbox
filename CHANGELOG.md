@@ -4,6 +4,20 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 While the version is below 1.0.0, minor releases may contain breaking changes;
 the API stabilises at 1.0.0.
 
+## 0.1.1
+
+### Fixed
+
+- `useReplayOptimistic` typed its `operations` as `QueryOperation<never, never>[]`,
+  which no real operation satisfies — the phantom `__result` type disagrees, so
+  every call site needed an `as never` cast. It now asks only for the slice it
+  reads (`ReplayableOperation`: a `name` and an optional `optimistic`), which
+  every operation fits without a cast.
+
+  Found by consuming the published package from the web example rather than
+  from inside the workspace, where the library's own test had the same cast
+  hiding it.
+
 ## 0.1.0
 
 Initial release.

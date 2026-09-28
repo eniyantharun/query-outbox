@@ -1,6 +1,6 @@
 {
   "name": "query-outbox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Durable, causally-ordered offline mutation queue for TanStack Query. Transactional outbox for React and React Native: survives app kill, replays in dependency order, deduplicates with idempotency keys.",
   "keywords": [
     "offline",
